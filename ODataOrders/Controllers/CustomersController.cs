@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Microsoft.EntityFrameworkCore;
 using ODataOrders.Data;
 
@@ -6,7 +8,7 @@ namespace ODataOrders;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CustomersController : ControllerBase
+public class CustomersController : ODataController
 {
     private readonly ODataOrdersContext _context;
 
@@ -15,10 +17,10 @@ public class CustomersController : ControllerBase
         _context = context;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
+    [EnableQuery]
+    public IActionResult Get()
     {
-        return Ok(await _context.Customers.ToArrayAsync());
+        return Ok(_context.Customers);
     }
 
     [HttpPost]
